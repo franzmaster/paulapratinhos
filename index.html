@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Paula Pratinhos</title>
+<style>
+  body { font-family: Arial, sans-serif; background-color: #F5F5DC; color: #8B4513; margin: 0; padding: 0; }
+  header { background: #8B4513; color: white; padding: 10px 20px; text-align: center; }
+  section { padding: 20px; max-width: 600px; margin: 0 auto; }
+  label { display: block; margin: 10px 0 5px; }
+  input, select { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #CC5500; border-radius: 4px; }
+  button { background-color: #CC5500; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
+  button:hover { background-color: #808000; }
+  .hidden { display: none; }
+  .modal-bg { background-color: rgba(0, 0, 0, 0.6); position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+              display: flex; justify-content: center; align-items: center; visibility: hidden; }
+  .modal { background: white; color: #8B4513; border-radius: 8px; padding: 20px; width: 90%; max-width: 400px; white-space: pre-wrap; }
+  .modal-bg.visible { visibility: visible; }
+</style>
+</head>
+<body>
+<header><h1>Paula Pratinhos</h1></header>
+
+<section id="cadastro">
+  <h2>Cadastro</h2>
+  <label for="nome">Nome Completo</label>
+  <input type="text" id="nome" required>
+  <label for="email">E-mail</label>
+  <input type="email" id="email" required>
+  <label for="telefone">Telefone</label>
+  <input type="tel" id="telefone" required>
+  <button onclick="proximoCadastro()">Próximo</button>
+</section>
+
+<section id="pedido" class="hidden">
+  <h2>Monte seu pedido</h2>
+  <label for="tamanho">Tamanho do Pratinho</label>
+  <select id="tamanho">
+    <option value="P">P - R$ 15,00</option>
+    <option value="M">M - R$ 17,00</option>
+    <option value="G">G - R$ 20,00</option>
+  </select>
+
+  <label for="guarnicao">Guarnição (Escolha 1)</label>
+  <select id="guarnicao">
+    <option>Baião de Dois</option>
+    <option>Arroz Branco</option>
+    <option>Arroz com Cenoura e Passas</option>
+  </select>
+
+  <label>Misturas (Escolha 2)</label>
+  <label><input type="checkbox" name="mistura" value="Vatapá de Frango" onclick="contarMisturas()"> Vatapá de Frango</label>
+  <label><input type="checkbox" name="mistura" value="Creme de Frango" onclick="contarMisturas()"> Creme de Frango</label>
+  <label><input type="checkbox" name="mistura" value="Calabresa Acebolada" onclick="contarMisturas()"> Calabresa Acebolada</label>
+  <label><input type="checkbox" name="mistura" value="Fricassê de Frango" onclick="contarMisturas()"> Fricassê de Frango</label>
+  <label><input type="checkbox" name="mistura" value="Fricassê de Carne" onclick="contarMisturas()"> Fricassê de Carne</label>
+  <label><input type="checkbox" name="mistura" value="Strogonoff de Frango" onclick="contarMisturas()"> Strogonoff de Frango</label>
+  <label><input type="checkbox" name="mistura" value="Strogonoff de Carne" onclick="contarMisturas()"> Strogonoff de Carne</label>
+  <label><input type="checkbox" name="mistura" value="Panqueca de Carne" onclick="contarMisturas()"> Panqueca de Carne</label>
+
+  <label>Acompanhamentos</label>
+  <select id="acompanhamento">
+    <option value="Completo">Completo (Paçoca, Batata Palha e Saladas)</option>
+    <option value="Paçoca">Paçoca</option>
+    <option value="Batata Palha">Batata Palha</option>
+    <option value="Saladas">Saladas</option>
+  </select>
+
+  <button onclick="proximoPedido()">Próximo</button>
+</section>
+
+<section id="entrega" class="hidden">
+  <h2>Entrega e Pagamento</h2>
+  <label for="nomeEntrega">Nome</label>
+  <input type="text" id="nomeEntrega" required>
+  <label for="endereco">Endereço</label>
+  <input type="text" id="endereco" required>
+  <label for="telefoneEntrega">Telefone</label>
+  <input type="tel" id="telefoneEntrega" required>
+
+  <label for="pagamento">Forma de Pagamento</label>
+  <select id="pagamento" onchange="mostrarTroco()">
+    <option value="cartao">Cartão de Crédito/Débito</option>
+    <option value="pix">Pix</option>
+    <option value="dinheiro">Dinheiro</option>
+  </select>
+
+  <div id="trocoDiv" class="hidden">
+    <label for="troco">Troco para</label>
+    <input type="number" id="troco" min="0" step="0.01">
+  </div>
+
+  <button onclick="finalizarPedido()">Finalizar Pedido</button>
+</section>
+
+<div id="modal" class="modal-bg">
+  <div class="modal">
+    <p id="statusPedido"></p>
+    <button onclick="confirmarPedido()">Confirmar Pedido</button>
+    <button onclick="voltarCardapio()">Voltar ao Cardápio</button>
+  </div>
+</div>
+
+<script>
+  let cadastroData = {};
+  let pedidoData = {};
+
+  function proximoCadastro() {
+    const nome = document.getElementById('nome').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefone = document.getElementById('telefone').value.trim();
+    if (!nome || !email || !telefone) {
+      alert('Por favor, preencha todos os campos do cadastro.');
+      return;
+    }
+    cadastroData = { nome, email, telefone };
+    document.getElementById('cadastro').classList.add('hidden');
+    document.getElementById('pedido').classList.remove('hidden');
+  }
+
+  function contarMisturas() {
+    const checkboxes = document.querySelectorAll('input[name="mistura"]:checked');
+    if (checkboxes.length > 2) {
+      checkboxes[checkboxes.length - 1].checked = false;
+      alert('Escolha no máximo 2 misturas.');
+    }
+  }
+
+  function proximoPedido() {
+    const tamanho = document.getElementById('tamanho').value;
+    const guarnicao = document.getElementById('guarnicao').value;
+    const misturasChecked = Array.from(document.querySelectorAll('input[name="mistura"]:checked')).map(i => i.value);
+    if (misturasChecked.length !== 2) {
+      alert('Por favor, escolha 2 misturas.');
+      return;
+    }
+    const acompanhamento = document.getElementById('acompanhamento').value;
+
+    pedidoData = { tamanho, guarnicao, misturas: misturasChecked, acompanhamento };
+    document.getElementById('pedido').classList.add('hidden');
+    document.getElementById('entrega').classList.remove('hidden');
+
+    document.getElementById('nomeEntrega').value = cadastroData.nome;
+    document.getElementById('telefoneEntrega').value = cadastroData.telefone;
+  }
+
+  function mostrarTroco() {
+    const formaPagamento = document.getElementById('pagamento').value;
+    document.getElementById('trocoDiv').classList.toggle('hidden', formaPagamento !== 'dinheiro');
+  }
+
+  function gerarResumoPedido() {
+    return `Pedido de Paula Pratinhos:
+
+Nome: ${cadastroData.nome}
+Telefone: ${cadastroData.telefone}
+
+Tamanho do Pratinho: ${pedidoData.tamanho}
+Guarnição: ${pedidoData.guarnicao}
+Misturas: ${pedidoData.misturas.join(', ')}
+Acompanhamento: ${pedidoData.acompanhamento}
+
+Endereço de Entrega: ${document.getElementById('endereco').value}
+Forma de Pagamento: ${document.getElementById('pagamento').value === 'dinheiro' ? 'Dinheiro' : document.getElementById('pagamento').value.toUpperCase()}
+Troco para: ${document.getElementById('pagamento').value === 'dinheiro' ? document.getElementById('troco').value || 'N/A' : 'N/A'}`;
+  }
+
+  function finalizarPedido() {
+    const nomeEntrega = document.getElementById('nomeEntrega').value.trim();
+    const endereco = document.getElementById('endereco').value.trim();
+    const telefoneEntrega = document.getElementById('telefoneEntrega').value.trim();
+    if (!nomeEntrega || !endereco || !telefoneEntrega) {
+      alert('Por favor, preencha todos os campos de entrega.');
+      return;
+    }
+    const resumo = gerarResumoPedido();
+    document.getElementById('statusPedido').textContent = resumo;
+    document.getElementById('modal').classList.add('visible');
+  }
+
+  function confirmarPedido() {
+    const resumo = gerarResumoPedido();
+    const phone = '5585992121215';
+    const urlWhatsApp = `https://wa.me/${phone}?text=${encodeURIComponent(resumo)}`;
+    window.open(urlWhatsApp, '_blank');
+    alert('Pedido enviado com sucesso!');
+    document.getElementById('modal').classList.remove('visible');
+    document.getElementById('entrega').classList.add('hidden');
+    document.getElementById('pedido').classList.remove('hidden');
+  }
+
+  function voltarCardapio() {
+    document.getElementById('modal').classList.remove('visible');
+  }
+</script>
+</body>
+</html>
