@@ -1,14 +1,16 @@
 import { z } from "zod";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import {
+import type {
   CallToolResult,
   GetPromptResult,
   ReadResourceResult,
 } from "@modelcontextprotocol/sdk/types.js";
 
-
+/**
+ * Creates and configures an MCP server with tools, prompts, and resources.
+ * @returns A configured McpServer instance
+ */
 export const setupMCPServer = (): McpServer => {
-
   const server = new McpServer(
     {
       name: "stateless-server",
@@ -17,9 +19,18 @@ export const setupMCPServer = (): McpServer => {
     { capabilities: { logging: {} } }
   );
 
-  // Register a prompt template that allows the server to
-  // provide the context structure and (optionally) the variables
-  // that should be placed inside of the prompt for client to fill in.
+  registerGreetingPrompt(server);
+  registerNotificationStreamTool(server);
+  registerGreetingResource(server);
+
+  return server;
+};
+
+/**
+ * Registers a greeting prompt template that provides context structure
+ * and variables for the client to fill in.
+ */
+const registerGreetingPrompt = (server: McpServer): void => {
   server.prompt(
     "greeting-template",
     "A simple greeting prompt template",
@@ -40,9 +51,13 @@ export const setupMCPServer = (): McpServer => {
       };
     }
   );
+};
 
-  // Register a tool specifically for testing the ability
-  // to resume notification streams to the client
+/**
+ * Registers a tool for testing notification stream resumability.
+ * Sends periodic notifications at specified intervals.
+ */
+const registerNotificationStreamTool = (server: McpServer): void => {
   server.tool(
     "start-notification-stream",
     "Starts sending periodic notifications for testing resumability",
@@ -77,7 +92,6 @@ export const setupMCPServer = (): McpServer => {
         } catch (error) {
           console.error("Error sending notification:", error);
         }
-        // Wait for the specified interval
         await sleep(interval);
       }
 
@@ -91,9 +105,12 @@ export const setupMCPServer = (): McpServer => {
       };
     }
   );
+};
 
-  // Create a resource that can be fetched by the client through
-  // this MCP server.
+/**
+ * Registers a greeting resource that can be fetched by the client.
+ */
+const registerGreetingResource = (server: McpServer): void => {
   server.resource(
     "greeting-resource",
     "https://example.com/greetings/default",
@@ -109,5 +126,4 @@ export const setupMCPServer = (): McpServer => {
       };
     }
   );
-  return server;
 };

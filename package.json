@@ -13,5 +13,9 @@
         "fetch-to-node": "^2.0.0",
         "serverless-http": "^3.2.0",
         "zod": "^3.24.3"
+    },
+    "devDependencies": {
+        "@types/node": "^25.9.1",
+        "typescript": "^6.0.3"
     }
 }
