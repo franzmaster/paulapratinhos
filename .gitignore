@@ -1,5 +1,22 @@
+```
 # Dependencies
-node_modules
+node_modules/
 
-# Local Netlify folder
-.netlify
+# Environment
+.env
+.env.local
+.env.*
+
+# Logs and temp files
+*.log
+*.tmp
+
+# Editors
+.vscode/
+.idea/
+
+# Build outputs
+dist/
+build/
+target/
+```
