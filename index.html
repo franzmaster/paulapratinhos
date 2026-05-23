@@ -2,38 +2,261 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Paula Pratinhos</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paula Pratinhos - Sabor & Delícia</title>
 <style>
-  body { font-family: Arial, sans-serif; background-color: #F5F5DC; color: #8B4513; margin: 0; padding: 0; }
-  header { background: #8B4513; color: white; padding: 10px 20px; text-align: center; }
-  section { padding: 20px; max-width: 600px; margin: 0 auto; }
-  label { display: block; margin: 10px 0 5px; }
-  input, select { width: 100%; padding: 8px; margin-bottom: 15px; border: 1px solid #CC5500; border-radius: 4px; }
-  button { background-color: #CC5500; color: white; padding: 10px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; }
-  button:hover { background-color: #808000; }
+  :root {
+    --primary-color: #D35400;
+    --secondary-color: #E67E22;
+    --accent-color: #F39C12;
+    --background-color: #FFF8E7;
+    --text-color: #5D4037;
+    --header-bg: linear-gradient(135deg, #D35400, #E67E22);
+    --button-hover: #A04000;
+    --border-color: #DEB887;
+    --shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+  
+  * { box-sizing: border-box; }
+  
+  body { 
+    font-family: 'Georgia', 'Times New Roman', serif; 
+    background: linear-gradient(180deg, #FFF8E7 0%, #FFE4B5 100%);
+    color: var(--text-color); 
+    margin: 0; 
+    padding: 0; 
+    line-height: 1.6;
+  }
+  
+  header { 
+    background: var(--header-bg); 
+    color: white; 
+    padding: 20px 15px; 
+    text-align: center;
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  
+  header h1 { 
+    margin: 0; 
+    font-size: 1.8rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  }
+  
+  header p { 
+    margin: 5px 0 0; 
+    font-style: italic;
+    font-size: 0.9rem;
+    opacity: 0.9;
+  }
+  
+  section { 
+    padding: 25px 20px; 
+    max-width: 800px; 
+    margin: 20px auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: var(--shadow);
+    border: 2px solid var(--border-color);
+  }
+  
+  section h2 { 
+    color: var(--primary-color);
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    border-bottom: 2px dashed var(--accent-color);
+    padding-bottom: 10px;
+  }
+  
+  label { 
+    display: block; 
+    margin: 15px 0 8px; 
+    font-weight: bold;
+    color: var(--text-color);
+  }
+  
+  input, select { 
+    width: 100%; 
+    padding: 12px 15px; 
+    margin-bottom: 15px; 
+    border: 2px solid var(--border-color); 
+    border-radius: 8px; 
+    font-size: 1rem;
+    transition: border-color 0.3s;
+    background: #FFFEF7;
+  }
+  
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--primary-color);
+  }
+  
+  button { 
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color)); 
+    color: white; 
+    padding: 15px 20px; 
+    border: none; 
+    border-radius: 8px; 
+    cursor: pointer; 
+    width: 100%; 
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: var(--shadow);
+    margin-top: 10px;
+  }
+  
+  button:hover { 
+    background: linear-gradient(135deg, var(--button-hover), var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  }
+  
+  button:active {
+    transform: translateY(0);
+  }
+  
   .hidden { display: none; }
-  .modal-bg { background-color: rgba(0, 0, 0, 0.6); position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-              display: flex; justify-content: center; align-items: center; visibility: hidden; }
-  .modal { background: white; color: #8B4513; border-radius: 8px; padding: 20px; width: 90%; max-width: 400px; white-space: pre-wrap; }
+  
+  .modal-bg { 
+    background-color: rgba(0, 0, 0, 0.7); 
+    position: fixed; 
+    top: 0; 
+    left: 0; 
+    right: 0; 
+    bottom: 0;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    visibility: hidden;
+    z-index: 1000;
+    padding: 15px;
+  }
+  
+  .modal { 
+    background: white; 
+    color: var(--text-color); 
+    border-radius: 15px; 
+    padding: 25px; 
+    width: 100%; 
+    max-width: 500px; 
+    white-space: pre-wrap;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    border: 3px solid var(--accent-color);
+    max-height: 80vh;
+    overflow-y: auto;
+  }
+  
   .modal-bg.visible { visibility: visible; }
+  
+  .modal h3 {
+    color: var(--primary-color);
+    text-align: center;
+    margin-top: 0;
+  }
+  
+  .modal button {
+    margin-top: 15px;
+  }
+  
+  .modal button:first-of-type {
+    background: linear-gradient(135deg, #27AE60, #2ECC71);
+  }
+  
+  .modal button:last-of-type {
+    background: linear-gradient(135deg, #7F8C8D, #95A5A6);
+  }
+  
+  input[type="checkbox"] {
+    width: auto;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  
+  label.checkbox-label {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #FFFEF7;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    margin: 8px 0;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  label.checkbox-label:hover {
+    background: #FFF5E6;
+  }
+  
+  .food-icon {
+    font-size: 2rem;
+    display: block;
+    text-align: center;
+    margin: 10px 0;
+  }
+  
+  /* Responsividade para todas as telas */
+  @media (max-width: 768px) {
+    header h1 { font-size: 1.5rem; }
+    section { margin: 15px auto; padding: 20px 15px; }
+    section h2 { font-size: 1.3rem; }
+    button { font-size: 1rem; padding: 12px 15px; }
+    .modal { padding: 20px; }
+  }
+  
+  @media (max-width: 480px) {
+    header { padding: 15px 10px; }
+    header h1 { font-size: 1.3rem; }
+    header p { font-size: 0.8rem; }
+    section { margin: 10px auto; padding: 15px 12px; border-radius: 10px; }
+    section h2 { font-size: 1.2rem; }
+    input, select { padding: 10px 12px; font-size: 0.95rem; }
+    button { font-size: 0.95rem; padding: 12px; }
+    .modal { padding: 15px; max-width: 95%; }
+    .food-icon { font-size: 1.5rem; }
+  }
+  
+  @media (min-width: 769px) and (max-width: 1024px) {
+    section { max-width: 700px; }
+  }
+  
+  @media (min-width: 1025px) {
+    section { max-width: 800px; }
+    button { max-width: 400px; margin-left: auto; margin-right: auto; }
+  }
+  
+  @media (orientation: landscape) and (max-height: 500px) {
+    header { padding: 10px; }
+    header h1 { font-size: 1.2rem; }
+    section { margin: 10px auto; padding: 15px; }
+    .modal { max-height: 90vh; }
+  }
 </style>
 </head>
 <body>
-<header><h1>Paula Pratinhos</h1></header>
+<header>
+  <span class="food-icon">🍳👨‍🍳🍽️</span>
+  <h1>Paula Pratinhos</h1>
+  <p>Sabor caseiro que aquece o coração!</p>
+</header>
 
 <section id="cadastro">
-  <h2>Cadastro</h2>
+  <h2>👤 Cadastro</h2>
   <label for="nome">Nome Completo</label>
-  <input type="text" id="nome" required>
-  <label for="email">E-mail</label>
-  <input type="email" id="email" required>
-  <label for="telefone">Telefone</label>
-  <input type="tel" id="telefone" required>
-  <button onclick="proximoCadastro()">Próximo</button>
+  <input type="text" id="nome" required placeholder="Digite seu nome completo">
+  <label for="email">E-mail 📧</label>
+  <input type="email" id="email" required placeholder="seu@email.com">
+  <label for="telefone">Telefone 📱</label>
+  <input type="tel" id="telefone" required placeholder="(XX) XXXXX-XXXX">
+  <button onclick="proximoCadastro()">Próximo ➡️</button>
 </section>
 
 <section id="pedido" class="hidden">
-  <h2>Monte seu pedido</h2>
+  <h2>🍽️ Monte seu Pedido</h2>
   <label for="tamanho">Tamanho do Pratinho</label>
   <select id="tamanho">
     <option value="P">P - R$ 15,00</option>
@@ -48,17 +271,17 @@
     <option>Arroz com Cenoura e Passas</option>
   </select>
 
-  <label>Misturas (Escolha 2)</label>
-  <label><input type="checkbox" name="mistura" value="Vatapá de Frango" onclick="contarMisturas()"> Vatapá de Frango</label>
-  <label><input type="checkbox" name="mistura" value="Creme de Frango" onclick="contarMisturas()"> Creme de Frango</label>
-  <label><input type="checkbox" name="mistura" value="Calabresa Acebolada" onclick="contarMisturas()"> Calabresa Acebolada</label>
-  <label><input type="checkbox" name="mistura" value="Fricassê de Frango" onclick="contarMisturas()"> Fricassê de Frango</label>
-  <label><input type="checkbox" name="mistura" value="Fricassê de Carne" onclick="contarMisturas()"> Fricassê de Carne</label>
-  <label><input type="checkbox" name="mistura" value="Strogonoff de Frango" onclick="contarMisturas()"> Strogonoff de Frango</label>
-  <label><input type="checkbox" name="mistura" value="Strogonoff de Carne" onclick="contarMisturas()"> Strogonoff de Carne</label>
-  <label><input type="checkbox" name="mistura" value="Panqueca de Carne" onclick="contarMisturas()"> Panqueca de Carne</label>
+  <label>Misturas (Escolha 2) 🍗</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Vatapá de Frango" onclick="contarMisturas()"> Vatapá de Frango</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Creme de Frango" onclick="contarMisturas()"> Creme de Frango</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Calabresa Acebolada" onclick="contarMisturas()"> Calabresa Acebolada</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Fricassê de Frango" onclick="contarMisturas()"> Fricassê de Frango</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Fricassê de Carne" onclick="contarMisturas()"> Fricassê de Carne</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Strogonoff de Frango" onclick="contarMisturas()"> Strogonoff de Frango</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Strogonoff de Carne" onclick="contarMisturas()"> Strogonoff de Carne</label>
+  <label class="checkbox-label"><input type="checkbox" name="mistura" value="Panqueca de Carne" onclick="contarMisturas()"> Panqueca de Carne</label>
 
-  <label>Acompanhamentos</label>
+  <label>Acompanhamentos 🥗</label>
   <select id="acompanhamento">
     <option value="Completo">Completo (Paçoca, Batata Palha e Saladas)</option>
     <option value="Paçoca">Paçoca</option>
@@ -70,15 +293,15 @@
 </section>
 
 <section id="entrega" class="hidden">
-  <h2>Entrega e Pagamento</h2>
+  <h2>🚚 Entrega e Pagamento</h2>
   <label for="nomeEntrega">Nome</label>
   <input type="text" id="nomeEntrega" required>
-  <label for="endereco">Endereço</label>
+  <label for="endereco">Endereço de Entrega 🏠</label>
   <input type="text" id="endereco" required>
   <label for="telefoneEntrega">Telefone</label>
   <input type="tel" id="telefoneEntrega" required>
 
-  <label for="pagamento">Forma de Pagamento</label>
+  <label for="pagamento">Forma de Pagamento 💳</label>
   <select id="pagamento" onchange="mostrarTroco()">
     <option value="cartao">Cartão de Crédito/Débito</option>
     <option value="pix">Pix</option>
@@ -86,18 +309,19 @@
   </select>
 
   <div id="trocoDiv" class="hidden">
-    <label for="troco">Troco para</label>
+    <label for="troco">Troco para 💵</label>
     <input type="number" id="troco" min="0" step="0.01">
   </div>
 
-  <button onclick="finalizarPedido()">Finalizar Pedido</button>
+  <button onclick="finalizarPedido()">Finalizar Pedido ✅</button>
 </section>
 
 <div id="modal" class="modal-bg">
   <div class="modal">
+    <h3>📋 Resumo do Pedido</h3>
     <p id="statusPedido"></p>
-    <button onclick="confirmarPedido()">Confirmar Pedido</button>
-    <button onclick="voltarCardapio()">Voltar ao Cardápio</button>
+    <button onclick="confirmarPedido()">Confirmar Pedido 🚀</button>
+    <button onclick="voltarCardapio()">Voltar ao Cardápio 🔙</button>
   </div>
 </div>
 
